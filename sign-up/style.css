@@ -24,8 +24,7 @@ form{
     /* align-items: center;  */
 }
 
-
-
-body{
-   
+button{
+   height: 2rem;
+   width: 5rem;
 }
