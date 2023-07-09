@@ -50,23 +50,21 @@ exports.logIn=async(req,res,next)=>
       {
         bcrypt.compare(password,user[0].password, (err,result)=>    //we cant use res here  because we use it above so use result instead of res
         {
-          console.log("inside bcrypt")
           if(err)
           {
             throw new Error("something went wrong")
           }
            if(result===true)
            {
-            res.status(200).json({responce:"User log in sucessful"})
+            res.status(200).json({responce:"User log in sucessfully",success:true})
            }
           else{
-           return res.status(401).json({responce:"Password is incorrect"})
-          }
-         
+           return res.status(401).json({responce:"Password is incorrect",success:false})
+          } 
         })
       }
       else{
-        return res.status(401).json({responce:"User not authorized"})
+        return res.status(401).json({responce:"User not authorized",success:false})
       }        
    }
    catch(err)

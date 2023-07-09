@@ -24,7 +24,8 @@ app.use((req,res,next)=>
 
 const userRoutes=require('./routes/user')
 app.use('/user',userRoutes)
-
+const expenceRoutes=require('./routes/expence')
+app.use('/expence',expenceRoutes)
 sequelize
 // .sync({force:true})
 .sync() 
