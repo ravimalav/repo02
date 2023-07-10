@@ -4,8 +4,10 @@ const router=express.Router()
 
 const expenceController=require('../controllers/expence')
 
-router.get('/get-expence',expenceController.getListItems)
-router.post('/add-expence',expenceController.addExpence)
-router.delete('/delete-expence/:expenceId',expenceController.deleteExpence)
+const userAuthenticate=require('../middleware/authenticate')
+
+router.get('/get-expence',userAuthenticate.authenticate,expenceController.getExpences)
+router.post('/add-expence',userAuthenticate.authenticate,expenceController.addExpence)
+router.delete('/delete-expence/:expenceId',userAuthenticate.authenticate,expenceController.deleteExpence)
 
 module.exports=router;

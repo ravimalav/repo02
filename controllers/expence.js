@@ -1,10 +1,10 @@
 const Expence=require('../models/expences')
 
-exports.getListItems=async (req,res,next)=>
+exports.getExpences=async (req,res,next)=>
 {
     try
     {
-        const allListItems=await Expence.findAll()
+        const allListItems=await Expence.findAll({where:{userId:req.user.id}})
         res.status(201).json({responce:allListItems})
     }
     catch(err)
@@ -19,7 +19,7 @@ exports.addExpence=async (req,res,next)=>
         const{amount,description,category}=req.body
          function stringValidator(string)
          {
-            if(string===undefined || string.length>=0)
+            if(string===undefined || string.length<=0)
             {
                return true;
             }
@@ -37,7 +37,8 @@ exports.addExpence=async (req,res,next)=>
             {
                 expence_amount:amount,
                 expence_desc:description,
-                expence_category:category
+                expence_category:category,
+                userId:req.user.id
             }
         )
         res.status(200).json({responce:addExpence})
@@ -51,8 +52,8 @@ exports.addExpence=async (req,res,next)=>
 exports.deleteExpence=async(req,res,next)=>
 {
     try{
-        const expenceId=req.params.expenceId
-        await Expence.destroy({where:{id:expenceId}})
+        const  expenceid=req.params.expenceId
+        await Expence.destroy({where:{userId:req.user.id} && {id:expenceid}})
         res.status(201).json({responce:"expence deleted successfully"})
     }
     catch(err)

@@ -1,12 +1,20 @@
 
 const User=require('../models/user')
 const bcrypt=require('bcrypt')
+const jwt=require('jsonwebtoken')
+
 
 exports.signUp=async (req,res,next)=>
 {
     try{
-    const {username,useremail,userpass}=req.body
+        
+      function jasonWebToken(id)
+      {
+        return jwt.sign({userId:id},'secreteKey')
+      }
 
+    const {username,useremail,userpass}=req.body
+    
     if(!username || !useremail || !userpass)
     {
       return res.status(400).json({responce:"Invalid data entry"})
@@ -16,17 +24,19 @@ exports.signUp=async (req,res,next)=>
     {
       return res.status(400).json({responce:"Already exist user"})
     }
+
+
     //Encription of password
     const saltRounds=10;     //used to generate more secure random string
    const encryptedPassword= await bcrypt.hash(userpass,saltRounds)
-      await User.create(
+    const createNewUser=  await User.create(
         {
             name:username,
             email:useremail,
             password:encryptedPassword
         }
-    )
-    res.status(201).json({responce:"Successfully created new user"})
+    )   
+       res.status(201).json({responce:"Successfully created new user",success:true,token:jasonWebToken(createNewUser.id)})
     }
     catch(err)
     {
@@ -37,7 +47,10 @@ exports.signUp=async (req,res,next)=>
 exports.logIn=async(req,res,next)=>
 {
    try{
-    console.log("try block of bakend")
+       function jasonWebToken(id)
+       {
+        return jwt.sign({userId:id},'secreteKey')
+       }
        const email=req.body.email
        const password=req.body.password
        // checking that mail is areadi exist or not
@@ -56,7 +69,7 @@ exports.logIn=async(req,res,next)=>
           }
            if(result===true)
            {
-            res.status(200).json({responce:"User log in sucessfully",success:true})
+            res.status(200).json({responce:"User log in sucessfully",success:true,token:jasonWebToken(user[0].id)})
            }
           else{
            return res.status(401).json({responce:"Password is incorrect",success:false})
@@ -64,7 +77,7 @@ exports.logIn=async(req,res,next)=>
         })
       }
       else{
-        return res.status(401).json({responce:"User not authorized",success:false})
+        return res.status(400).json({responce:"User not authorized",success:false})
       }        
    }
    catch(err)

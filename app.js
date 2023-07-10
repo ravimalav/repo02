@@ -13,6 +13,8 @@ const bodyParser=require('body-parser');
 
 app.use(bodyParser.json())
 
+const User=require('./models/user')
+const Expence=require('./models/expences')
 
 app.use((req,res,next)=>
 {
@@ -26,6 +28,12 @@ const userRoutes=require('./routes/user')
 app.use('/user',userRoutes)
 const expenceRoutes=require('./routes/expence')
 app.use('/expence',expenceRoutes)
+
+// Expence.hasOne(User)    //one expence has one user
+// User.belongsTo(Expence) //user belongsTo expence
+User.hasMany(Expence)   //user can have many expence
+Expence.belongsTo(User)   //user    belongs to expence
+
 sequelize
 // .sync({force:true})
 .sync() 
@@ -33,4 +41,4 @@ sequelize
     {
         app.listen(3000)
     })
-.catch(err=>console.log("err into app"))
+.catch(err=>console.log(err))
