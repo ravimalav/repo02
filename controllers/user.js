@@ -53,6 +53,15 @@ exports.logIn=async(req,res,next)=>
        }
        const email=req.body.email
        const password=req.body.password
+        async function checkMemberShip()
+         {
+              //checking for status
+        return await User.findOne(
+        {
+          where:{email:email && ispremiumuser===true}
+        }
+       )?true:false;
+         }
        // checking that mail is areadi exist or not
      const user= await User.findAll(
       {

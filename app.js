@@ -2,9 +2,11 @@ const express=require('express');
 
 const app=express();
 
-const Sequelize=require('sequelize')
+const dotenv = require('dotenv');
+dotenv.config();
 
 const sequelize=require('./util/database');
+
 
 const cors=require('cors')
 app.use(cors())
@@ -15,6 +17,7 @@ app.use(bodyParser.json())
 
 const User=require('./models/user')
 const Expence=require('./models/expences')
+const Order=require('./models/purchase')
 
 app.use((req,res,next)=>
 {
@@ -28,9 +31,11 @@ const userRoutes=require('./routes/user')
 app.use('/user',userRoutes)
 const expenceRoutes=require('./routes/expence')
 app.use('/expence',expenceRoutes)
+const purchaseRoutes=require('./routes/purchase');
+app.use('/user',purchaseRoutes)
 
-// Expence.hasOne(User)    //one expence has one user
-// User.belongsTo(Expence) //user belongsTo expence
+User.hasMany(Order)    //one User has many Order
+Order.belongsTo(User) //user belongsTo expence 
 User.hasMany(Expence)   //user can have many expence
 Expence.belongsTo(User)   //user    belongs to expence
 

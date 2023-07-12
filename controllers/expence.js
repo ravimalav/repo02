@@ -1,5 +1,4 @@
 const Expence=require('../models/expences')
-
 exports.getExpences=async (req,res,next)=>
 {
     try
@@ -61,3 +60,5 @@ exports.deleteExpence=async(req,res,next)=>
         res.status(500).json({responce:"Expence is not deleted"})
     }
 }
+
+
