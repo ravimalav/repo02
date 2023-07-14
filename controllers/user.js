@@ -3,16 +3,14 @@ const User=require('../models/user')
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
 
+const jasonWebToken=(id,premiumStatus)=>
+{
+  return jwt.sign({userId:id, isPremiumUser:premiumStatus},'secreteKey')    
+}
 
 exports.signUp=async (req,res,next)=>
 {
     try{
-        
-      function jasonWebToken(id)
-      {
-        return jwt.sign({userId:id},'secreteKey')
-      }
-
     const {username,useremail,userpass}=req.body
     
     if(!username || !useremail || !userpass)
@@ -36,7 +34,9 @@ exports.signUp=async (req,res,next)=>
             password:encryptedPassword
         }
     )   
-       res.status(201).json({responce:"Successfully created new user",success:true,token:jasonWebToken(createNewUser.id)})
+    
+       res.status(201).json({responce:"Successfully created new user",success:true,token: jasonWebToken( createNewUser.id, null )})
+       console.log("hello user ==>>"+createNewUser.ispremiumuser)
     }
     catch(err)
     {
@@ -47,21 +47,10 @@ exports.signUp=async (req,res,next)=>
 exports.logIn=async(req,res,next)=>
 {
    try{
-       function jasonWebToken(id)
-       {
-        return jwt.sign({userId:id},'secreteKey')
-       }
        const email=req.body.email
        const password=req.body.password
-        async function checkMemberShip()
-         {
-              //checking for status
-        return await User.findOne(
-        {
-          where:{email:email && ispremiumuser===true}
-        }
-       )?true:false;
-         }
+
+      
        // checking that mail is areadi exist or not
      const user= await User.findAll(
       {
@@ -78,7 +67,7 @@ exports.logIn=async(req,res,next)=>
           }
            if(result===true)
            {
-            res.status(200).json({responce:"User log in sucessfully",success:true,token:jasonWebToken(user[0].id)})
+            res.status(200).json({responce:"User log in sucessfully",success:true,token:jasonWebToken(user[0].id, user[0].ispremiumuser)})
            }
           else{
            return res.status(401).json({responce:"Password is incorrect",success:false})

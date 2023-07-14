@@ -4,10 +4,16 @@ const Razorpay=require('razorpay')
 const process=require('process')
 const { or } = require('sequelize')
 const User = require('../models/user')
+const jwt=require('jsonwebtoken')
+
+const jasonWebToken=(id,premiumStatus)=>
+{
+  return jwt.sign({userId:id, isPremiumUser:premiumStatus},'secreteKey')    
+}
 
 
 exports.premiumSubscription=async(req,res,next)=>
-{
+{ 
     try{
           var rzp=new Razorpay({
             key_id:process.env.RAZORPAY_KEY_ID,           
@@ -43,11 +49,11 @@ exports.updateTransactionStatus=async (req,res,next)=>
      const order=await Order.findOne({where:{orderid:order_id}})
      const promise1=order.update({paymentid:payment_id,status:'SUCCESSFUL'})
      const promise2=req.user.update({ispremiumuser:true})   //promise1 and promise2 can paralally run together
-    
+      console.log(req.user.ispremiumuser)
     //using promise.all becuase all the promises are independent and return failed is any one is go to fail
     Promise.all([promise1,promise2]).then(()=>
     {
-      return res.status(202).json({success:true,responce:"Transaction Successfull"})
+      return res.status(202).json({success:true,responce:"Transaction Successfull",token:jasonWebToken(req.user.id, true)})
     }).catch(err=>
       {
         throw new Error(err)

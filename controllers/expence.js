@@ -62,3 +62,14 @@ exports.deleteExpence=async(req,res,next)=>
 }
 
 
+exports.showLeaderBoard=async(req,res,next)=>
+{
+    try
+    {
+       
+    }
+    catch(err)
+    {
+        res.status(500).json({responce:"Somethng went Wrong at showLeaderBoard",error:err})
+    }
+}

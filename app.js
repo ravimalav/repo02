@@ -33,6 +33,8 @@ const expenceRoutes=require('./routes/expence')
 app.use('/expence',expenceRoutes)
 const purchaseRoutes=require('./routes/purchase');
 app.use('/user',purchaseRoutes)
+const premiumRoutes=require('./routes/premium')
+app.use('/premium',premiumRoutes)
 
 User.hasMany(Order)    //one User has many Order
 Order.belongsTo(User) //user belongsTo expence 
