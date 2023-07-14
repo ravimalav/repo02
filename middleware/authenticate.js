@@ -14,6 +14,7 @@ const authenticate=async (req,res,next)=>
     }
     catch(err)
     {
+        console.log("User===>>>"+ req.user)
         res.status(500).json({responce:"Something wrong in authentication"})
     }
 

@@ -1,4 +1,6 @@
+const User=require('../models/user')
 const Expence=require('../models/expences')
+const sequelize=require('../util/database')
 exports.getExpences=async (req,res,next)=>
 {
     try
@@ -14,7 +16,9 @@ exports.getExpences=async (req,res,next)=>
 
 exports.addExpence=async (req,res,next)=>
 {
+      const t = await sequelize.transaction();     
    try{
+                 //using transaction to prevent from unwanted changes
         const{amount,description,category}=req.body
          function stringValidator(string)
          {
@@ -23,7 +27,7 @@ exports.addExpence=async (req,res,next)=>
                return true;
             }
             else{
-                false
+               return false;
             }
          }
 
@@ -38,25 +42,59 @@ exports.addExpence=async (req,res,next)=>
                 expence_desc:description,
                 expence_category:category,
                 userId:req.user.id
+            },
+            { transaction: t }
+        );
+        const totalAmount=Number(req.user.total_expence) + Number(amount)
+        await User.update(
+            {
+                total_expence:totalAmount
+            },
+            {
+                where:{id:req.user.id},
+                transaction: t
             }
-        )
+             
+        );
+        await t.commit();
         res.status(200).json({responce:addExpence})
    }
-   catch(responce)
+   catch(err)
    {
-    res.status(500).json({responce:"invalid Expence"})
+    await t.rollback();
+    res.status(500).json({responce:"invalid Expence",error:err})
    }
 }
 
 exports.deleteExpence=async(req,res,next)=>
 {
+    const t=await sequelize.transaction();
     try{
         const  expenceid=req.params.expenceId
-        await Expence.destroy({where:{userId:req.user.id} && {id:expenceid}})
+        const findRelatedUser=await Expence.findOne(
+            {
+                where:{userId:req.user.id} && {id:expenceid}
+            },
+            {transaction: t}
+        )
+       
+        await Expence.destroy({where:{userId:req.user.id} && {id:expenceid}},{transaction: t})
+        const updatedtotalExpence=Number(req.user.total_expence)-Number(findRelatedUser.expence_amount)
+        await User.update(
+            {
+                total_expence:updatedtotalExpence
+            },
+            {
+                where:{id:req.user.id},
+                transaction: t
+            }
+        )
+        await t.commit();
         res.status(201).json({responce:"expence deleted successfully"})
     }
     catch(err)
     {
+        await t.rollback();
         res.status(500).json({responce:"Expence is not deleted"})
     }
 }

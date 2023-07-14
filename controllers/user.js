@@ -23,7 +23,6 @@ exports.signUp=async (req,res,next)=>
       return res.status(400).json({responce:"Already exist user"})
     }
 
-
     //Encription of password
     const saltRounds=10;     //used to generate more secure random string
    const encryptedPassword= await bcrypt.hash(userpass,saltRounds)
@@ -31,7 +30,7 @@ exports.signUp=async (req,res,next)=>
         {
             name:username,
             email:useremail,
-            password:encryptedPassword
+            password:encryptedPassword,
         }
     )   
     

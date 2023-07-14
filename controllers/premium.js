@@ -7,14 +7,7 @@ const leaderBoardData=async(req,res,next)=>
     try{
           
         const leaderBoardDetails=await User.findAll({
-                attributes: ['id', 'name',[sequelize.fn('sum', sequelize.col('expences.expence_amount')),'total_expence']],
-                include: [
-                    {
-                        model:Expence,
-                        attributes:[]
-                    }
-                ],
-                group: ['user.id'],
+                attributes: ['id', 'name','total_expence'],
                 order: [[sequelize.col('total_expence'), 'DESC']]
             });
 
