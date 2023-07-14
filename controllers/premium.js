@@ -1,41 +1,22 @@
 const User = require('../models/user')
 const Expence = require('../models/expences')
-const { use } = require('../routes/user')
+const sequelize  = require('../util/database')
 
 const leaderBoardData=async(req,res,next)=>
 {
     try{
-          const allExpences=await Expence.findAll()
-          const allUsers=await User.findAll()
-
-          const userAggregateExpences={}     // to store the all expences related to perticular id, store data intokey value pair
-        
-            allExpences.forEach(expence => {
-                if(userAggregateExpences[expence.userId])
-                {
-                    userAggregateExpences[expence.userId]+=expence.expence_amount;
-                }
-                else
-                {
-                    userAggregateExpences[expence.userId]=expence.expence_amount
-                }
+          
+        const leaderBoardDetails=await User.findAll({
+                attributes: ['id', 'name',[sequelize.fn('sum', sequelize.col('expences.expence_amount')),'total_expence']],
+                include: [
+                    {
+                        model:Expence,
+                        attributes:[]
+                    }
+                ],
+                group: ['user.id'],
+                order: [[sequelize.col('total_expence'), 'DESC']]
             });
-            console.log(userAggregateExpences)
-            const leaderBoardDetails=[]
-            allUsers.forEach(user => {
-                if(userAggregateExpences[user.id])
-                { 
-                    leaderBoardDetails.push({name:user.name, totalExpence:userAggregateExpences[user.id]})
-                }
-                else
-                {
-                    leaderBoardDetails.push({name:user.name, totalExpence:0})
-                }      
-            });
-            function compareNumbers(a, b) {
-                return  b.totalExpence-a.totalExpence;
-              }
-            leaderBoardDetails.sort(compareNumbers);
 
             res.status(201).json({responce:leaderBoardDetails})
     }
