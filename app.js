@@ -18,6 +18,7 @@ app.use(bodyParser.json())
 const User=require('./models/user')
 const Expence=require('./models/expences')
 const Order=require('./models/purchase')
+const forgotPassword=require('./models/forgotpassword')
 
 app.use((req,res,next)=>
 {
@@ -35,12 +36,15 @@ const purchaseRoutes=require('./routes/purchase');
 app.use('/user',purchaseRoutes)
 const premiumRoutes=require('./routes/premium')
 app.use('/premium',premiumRoutes)
+const forgotPasswordRoutes=require('./routes/forgotpassword')
+app.use('/password',forgotPasswordRoutes)
 
 User.hasMany(Order)    //one User has many Order
 Order.belongsTo(User) //user belongsTo expence 
 User.hasMany(Expence)   //user can have many expence
 Expence.belongsTo(User)   //user    belongs to expence
-
+User.hasMany(forgotPassword)
+forgotPassword.belongsTo(User)
 sequelize
 // .sync({force:true})
 .sync() 

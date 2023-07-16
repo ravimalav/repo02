@@ -77,7 +77,6 @@ exports.deleteExpence=async(req,res,next)=>
             },
             {transaction: t}
         )
-       
         await Expence.destroy({where:{userId:req.user.id} && {id:expenceid}},{transaction: t})
         const updatedtotalExpence=Number(req.user.total_expence)-Number(findRelatedUser.expence_amount)
         await User.update(

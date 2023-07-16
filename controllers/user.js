@@ -3,6 +3,7 @@ const User=require('../models/user')
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
 
+
 const jasonWebToken=(id,premiumStatus)=>
 {
   return jwt.sign({userId:id, isPremiumUser:premiumStatus},'secreteKey')    
@@ -83,3 +84,4 @@ exports.logIn=async(req,res,next)=>
     res.status(500).json({responce:err})
    }
 }
+
