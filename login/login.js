@@ -17,15 +17,18 @@ async function userLogIn(event)
     }
      
     const logInData=await axios.post('http://localhost:3000/user/login',obj)
-    showMessage(logInData.data.responce)
+      alert(logInData.data.responce)
+      localStorage.setItem('token',logInData.data.token)
+      window.location.href='../add-expence/addExpance.html'
    }
 
    catch(err)
    {
-      showMessage("Something went wrong")
+      showMessage(err)
    }
 
 }
+
 
 function showMessage(message)
 {
