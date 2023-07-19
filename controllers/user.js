@@ -2,7 +2,7 @@
 const User=require('../models/user')
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
-
+const ExpenceUrlList=require('../models/fileurllist')
 
 const jasonWebToken=(id,premiumStatus)=>
 {
@@ -85,3 +85,17 @@ exports.logIn=async(req,res,next)=>
    }
 }
 
+
+exports.getFileList=async (req,res,next)=>
+{
+  try
+  {
+      const fileList= await ExpenceUrlList.findAll({where:{userId:req.user.id}})
+      console.log("fielList==>>"+fileList)
+      res.status(201).json({fileList,success:true})
+  }
+  catch(err)
+  {
+    res.status(500).json({responce:"Cant get file url list at this time",error:err})
+  }
+}

@@ -19,6 +19,7 @@ const User=require('./models/user')
 const Expence=require('./models/expences')
 const Order=require('./models/purchase')
 const forgotPassword=require('./models/forgotpassword')
+const expenceUrlList=require('./models/fileurllist')
 
 app.use((req,res,next)=>
 {
@@ -45,6 +46,9 @@ User.hasMany(Expence)   //user can have many expence
 Expence.belongsTo(User)   //user    belongs to expence
 User.hasMany(forgotPassword)
 forgotPassword.belongsTo(User)
+User.hasMany(expenceUrlList)
+expenceUrlList.belongsTo(User)
+
 sequelize
 // .sync({force:true})
 .sync() 

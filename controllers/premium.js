@@ -1,5 +1,4 @@
 const User = require('../models/user')
-const Expence = require('../models/expences')
 const sequelize  = require('../util/database')
 
 const leaderBoardData=async(req,res,next)=>

@@ -1,6 +1,11 @@
 const User=require('../models/user')
 const Expence=require('../models/expences')
 const sequelize=require('../util/database')
+const userServices=require('../services/userServices')
+const s3Services=require('../services/s3Services')
+const fileUrlList=require('../models/fileurllist')
+
+
 exports.getExpences=async (req,res,next)=>
 {
     try
@@ -99,14 +104,23 @@ exports.deleteExpence=async(req,res,next)=>
 }
 
 
-exports.showLeaderBoard=async(req,res,next)=>
+
+exports.downloadFile=async(req,res,next)=>
 {
-    try
-    {
-       
-    }
-    catch(err)
-    {
-        res.status(500).json({responce:"Somethng went Wrong at showLeaderBoard",error:err})
-    }
+  try{
+       const userId=req.user.id;   
+       const expences=await userServices.getExpences(req)
+       const stringifiedExpences=JSON.stringify(expences)
+       const fileName=`Expence/${userId}/${new Date}.txt`
+       const fileUrl=await s3Services.uploadToS3(stringifiedExpences,fileName)    //network call so used userService 
+       await fileUrlList.create({
+            expence_url:fileUrl,
+            userId:req.user.id
+       })      //saving file url into backend
+       res.status(201).json({fileUrl,success:true})
+  }
+  catch(err)
+  {
+    res.status(500).json({responce:err})
+  }
 }

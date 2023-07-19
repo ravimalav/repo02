@@ -1,5 +1,6 @@
 const uuid = require('uuid');
-const sgMail = require('@sendgrid/mail');
+// const sgMail = require('@sendgrid/mail');
+const Sib=require('sib-api-v3-sdk')
 const bcrypt = require('bcrypt');
 
 const User=require('../models/user')
@@ -16,18 +17,44 @@ const forgotpassword = async (req, res) => {
                     throw new Error(err)
                 })
 
-            sgMail.setApiKey(process.env.SENDBLUE_KEY_ID)
+            // sgMail.setApiKey(process.env.SENDBLUE_KEY_ID)
+            const client=Sib.ApiClient.instance
+            const apiKey=client.authentications['api-key']
+            apiKey.apiKey=process.env.SENDBLUE_KEY_ID
 
-            const msg = {
-                to: email, // Change to your recipient
-                from: 'ravimalav05@gmail.com', // Change to your verified sender
-                subject: 'Sending with SendGrid is Fun',
-                text: 'and easy to do anywhere, even with Node.js',
-                html: `<a href="http://localhost:3000/password/resetpassword/${id}">Reset password</a>`,
+            const tranEmailApi=new Sib.TransactionalEmailsApi()
+    
+            const sender=
+            {
+                email:'ravimalav0055@gmail.com'
+            }
+            const receivers=
+            {
+                email:email
             }
 
-             sgMail
-            .send(msg)
+            tranEmailApi
+            .sendTransacEmail(
+                {
+                    sender,
+                    to:receivers,
+                    subject:'password reset link',
+                    textcontent:'To reset your password please click this link'
+                }
+            )
+            console.log("hello")
+            // .then(console.log("password reseted"))
+
+            // const msg = {
+            //     to: email, // Change to your recipient
+            //     from: 'ravimalav05@gmail.com', // Change to your verified sender
+            //     subject: 'Sending with SendGrid is Fun',
+            //     text: 'and easy to do anywhere, even with Node.js',
+            //     html: `<a href="http://localhost:3000/password/resetpassword/${id}">Reset password</a>`,
+            // }
+
+            //  sgMail
+            // .send(msg)
             .then((response) => {
 
                 // console.log(response[0].statusCode)
@@ -36,6 +63,7 @@ const forgotpassword = async (req, res) => {
 
             })
             .catch((error) => {
+                console.log(error)
                 throw new Error(error);
             })
 
