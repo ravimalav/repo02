@@ -6,12 +6,32 @@ const s3Services=require('../services/s3Services')
 const fileUrlList=require('../models/fileurllist')
 
 
+
 exports.getExpences=async (req,res,next)=>
 {
     try
     {
-        const allListItems=await Expence.findAll({where:{userId:req.user.id}})
-        res.status(201).json({responce:allListItems})
+        const  ITEMS_PER_PAGE=3;
+        const page=+req.query.page||1;
+        console.log("page===>>>>"+page)
+        let totalCount;
+        const total=await Expence.count();
+        totalCount=total;
+        console.log("totalCount===>>>>"+totalCount)
+        const allListItems=await Expence.findAll({
+            where:{userId:req.user.id},
+            offset:(page-1)*ITEMS_PER_PAGE+1,
+            limit:ITEMS_PER_PAGE,   
+        })
+        res.status(201).json({
+            responce:allListItems,
+            currentPage:page,
+            hasNextPage:ITEMS_PER_PAGE * page < totalCount,
+            nextPage:page + 1 ,
+            previousPage:page - 1,
+            hasPreviousPage:page > 1, 
+            lastPage:Math.ceil(totalCount/ITEMS_PER_PAGE)
+        })
     }
     catch(err)
     {
