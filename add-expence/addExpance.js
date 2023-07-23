@@ -13,29 +13,85 @@ function parseJwt (token) {
     return JSON.parse(jsonPayload);
 }
 
+const pageList1=document.getElementById('button-list1')
+const pageList2=document.getElementById('button-list2')
+const pageList3=document.getElementById('button-list3')
+let check=true
+
+function showPagination({
+    currentPage,
+    hasNextPage,
+    nextPage,
+    previousPage,
+    hasPreviousPage,
+    lastPage
+})
+
+// its a block
+{
+    const paginationContainer = document.getElementById('pagination-container');
+    paginationContainer.innerHTML = '';
+    
+    for (let i = 1; i <= lastPage; i++) {
+        const pageLink = document.createElement('span');
+        pageLink.className = 'pagination-link';
+        pageLink.innerText = i;
+        pageLink.addEventListener('click', () => {
+          currentPage = i;
+          document.querySelector('#ul-list').innerHTML=""
+          getExpence(currentPage);
+        });
+        paginationContainer.appendChild(pageLink);
+      }
+    }
+
+
+
+
 window.addEventListener('DOMContentLoaded',async()=>
 {
     const token=localStorage.getItem('token')
     const checkPremiumStatus=parseJwt(token).isPremiumUser
+    const page=1;
     console.log(checkPremiumStatus + " and " +parseJwt(token).userId)
     if(checkPremiumStatus===true) 
     {
         premiumButton.value='Premium Account'
         showLeaderBoard();
         downloadExpenceButton();
+        listOfExpencesButton();
     }
     try{
-        
-        const getListItems=await axios.get('http://localhost:3000/expence/get-expence',{headers:{'Authorization':token}})
+        const getListItems=await axios.get(`http://localhost:3000/expence/get-expence?page=${page}`,{headers:{'Authorization':token}})
         for(let i=0;i<getListItems.data.responce.length;i++)
         {
-            showExpence(getListItems.data.responce[i])
+             showExpence(getListItems.data.responce[i])
         }
+        showPagination(getListItems.data)
     }
     catch(err){
         console.log(err)
     }
 })
+
+async function getExpence(page)
+{
+    try
+    {
+        const token=localStorage.getItem('token')
+        const getListItems=await axios.get(`http://localhost:3000/expence/get-expence?page=${page}`,{headers:{'Authorization':token}})
+        for(let i=0;i<getListItems.data.responce.length;i++)
+        {
+             showExpence(getListItems.data.responce[i])
+        }
+        check=false;
+        showPagination(getListItems.data)   
+    }
+    catch(err)
+    {
+        console.log(err)
+    }
+}
 
 async function addExpenceToList(e)
 {
@@ -55,7 +111,10 @@ async function addExpenceToList(e)
         }
 
         const postExpence=await axios.post('http://localhost:3000/expence/add-expence',obj,{headers:{'Authorization':token}})
-          showExpence(postExpence.data.responce)
+          if(globalCount%10 !==0)    
+          {
+            showExpence(postExpence.data.responce)
+          }
     }
     catch(err)
     {
@@ -63,7 +122,7 @@ async function addExpenceToList(e)
     }
 }
 
-function showExpence(obj)
+function showExpence(obj)   
 {
     const ul=document.getElementById('ul-list')
     const li=document.createElement('ol')
@@ -205,22 +264,71 @@ async function downloadExpenceFunction()
 {
    try
    {
+    
     const token=localStorage.getItem('token')
-    const downloadUrl=await axio.get('http://localhost:3000/user/download',{headers: {"Authorization" : token}})
-      if(downloadUrl.data.status===201)
+    const downloadUrl=await axios.get('http://localhost:3000/expence/download',{headers: {"Authorization" : token}})
+      if(downloadUrl.status===201)
       {
+        console.log("fileUrl==>>"+downloadUrl.data.url)
         const a=document.createElement('a')
-        a.href=downloadUrl.data.fileUrl
-        a.download='myexpence.csv'
+        a.href=downloadUrl.data.url
+        a.download=`Expence.txt`
         a.click()
       }
       else
       {
-        throw new Error(downloadUrl.data.responce)
+        throw new Error(downloadUrl.responce)
       }
    }
    catch(err)
    {
     console.log(err)
    }
+}
+
+async function listOfExpencesButton()
+{
+    try{
+         const div=document.getElementById('expence-url')
+         const input=document.createElement('input')
+         input.type='button'
+         input.value='Expences List'
+         input.classList='btn btn-secondary'
+         div.appendChild(input)
+        input.addEventListener('click',()=>
+        {
+            downloadExpenceListFunction();
+        })
+    }
+    catch(err)
+    {
+        console.log(err)
+    }
+}
+
+async function downloadExpenceListFunction()
+{
+    try
+    {
+        
+    const token=localStorage.getItem('token')
+          const urlList=await axios.get('http://localhost:3000/user/file-url-list',{headers: {"Authorization" : token}})
+          if(urlList.status===201)
+          {
+        console.log(urlList.data.fileList)
+          const a=document.createElement('a')
+          a.href=urlList.data.fileList
+          a.download='urlList.pdf'
+          a.click()
+          
+          }
+          else
+          {
+            throw new Error(urlList.error)
+          }
+    }
+    catch(err)
+    {
+        console.log(err)
+    }
 }
