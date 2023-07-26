@@ -1,9 +1,10 @@
 const Sequelize=require('sequelize')
-
-const sequelize=new Sequelize('daytoday_expenses','root','ravi2233',
+const process=require('process')
+const sequelize=new Sequelize('daytoday_expenses','root',process.env.DATABASE_PASS,
 {
     dialect:'mysql',
     host:'localhost'
 })
 
 module.exports=sequelize;
+

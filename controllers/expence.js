@@ -11,7 +11,7 @@ exports.getExpences=async (req,res,next)=>
 {
     try
     {
-        const  ITEMS_PER_PAGE=3;
+        const  ITEMS_PER_PAGE=+req.header('Rawsperpage')||3;
         const page=+req.query.page||1;
         console.log("page===>>>>"+page)
         let totalCount;
