@@ -32,7 +32,14 @@
         res.setHeader('Access-Control-Allow-Origin','http://127.0.0.1:5500');
         res.setHeader('Access-Control-Allow-Methods','POST,GET,PUT,PATCH,DELETE');
         res.setHeader('Access-Control-Allow-Methods','Content-Type','Authorization');
-        next();
+        res.setHeader('Cross-origin-Embedder-Policy', 'require-corp');
+  res.setHeader('Cross-origin-Opener-Policy','same-origin');
+
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200)
+  } else {
+    next()
+  }
     })  
 
     const userRoutes=require('./routes/user')
