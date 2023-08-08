@@ -29,14 +29,11 @@
     {
         res.setHeader('Access-Control-Allow-Origin','*');
         res.setHeader('Access-Control-Allow-Methods','POST,GET,PUT,PATCH,DELETE');
-        res.setHeader('Access-Control-Allow-Methods','Content-Type','Authorization');
+        res.setHeader('Access-Control-Allow-HEaders','Content-Type','Authorization');
         res.setHeader('Cross-origin-Embedder-Policy', 'require-corp');
         res.setHeader('Cross-origin-Opener-Policy','same-origin');
-  if (req.method === 'OPTIONS') {
-    res.sendStatus(200)
-  } else {
-    next()
-  }
+         next()
+  
     })  
 
     const userRoutes=require('./routes/user')
@@ -50,6 +47,12 @@
     const forgotPasswordRoutes=require('./routes/forgotpassword')
     const { cpuUsage } = require('process')
     app.use('/password',forgotPasswordRoutes)
+
+    //dynamic routes 
+    app.use((req,res)=>
+    {
+      res.sendFile(path.join(__dirname,`public/${req.url}`))
+    })
 
     User.hasMany(Order)    //one User has many Order
     Order.belongsTo(User) //user belongsTo expence 
