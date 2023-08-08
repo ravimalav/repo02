@@ -12,14 +12,12 @@
     const sequelize=require('./util/database');
 
     const cors=require('cors')
-    app.use(cors())
+    app.use(cors())  
 
     const bodyParser=require('body-parser');
 
     app.use(bodyParser.json())
 
-    const helmet=require('helmet')
-    const morgan=require('morgan')
 
     const User=require('./models/user')
     const Expence=require('./models/expences')
@@ -29,12 +27,11 @@
 
     app.use((req,res,next)=>
     {
-        res.setHeader('Access-Control-Allow-Origin','http://127.0.0.1:5500');
+        res.setHeader('Access-Control-Allow-Origin','*');
         res.setHeader('Access-Control-Allow-Methods','POST,GET,PUT,PATCH,DELETE');
         res.setHeader('Access-Control-Allow-Methods','Content-Type','Authorization');
         res.setHeader('Cross-origin-Embedder-Policy', 'require-corp');
-  res.setHeader('Cross-origin-Opener-Policy','same-origin');
-
+        res.setHeader('Cross-origin-Opener-Policy','same-origin');
   if (req.method === 'OPTIONS') {
     res.sendStatus(200)
   } else {
@@ -69,16 +66,7 @@
        {flags:'a'}
     )
     
-    app.use(helmet())   
-    if(process.env.NODE_ENV==='production')
-    {
-        app.use(morgan('combined',{stream:loggingAccesssFile}))
-    }
-    else{
-        app.use(morgan('dev'))
-    }
-    
-    console.log("process.env variable is==>>"+ process.env.NODE_ENV)
+  
 
     sequelize
     // .sync({force:true})
