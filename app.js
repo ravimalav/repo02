@@ -32,7 +32,7 @@
         res.setHeader('Access-Control-Allow-HEaders','Content-Type','Authorization');
         res.setHeader('Cross-origin-Embedder-Policy', 'require-corp');
         res.setHeader('Cross-origin-Opener-Policy','same-origin');
-         next()
+         next();
   
     })  
 
