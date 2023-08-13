@@ -15,7 +15,7 @@ async function signupData(e)
         useremail,
         userpass
     }
-    const postData=await axios.post('http://43.204.108.196:3000/user/signup',obj)
+    const postData=await axios.post('http://3.7.45.255:3000/user/signup',obj)
       if(postData.data.success===true)
       {
          alert(postData.data.responce)
