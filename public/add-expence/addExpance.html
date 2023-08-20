@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.5/axios.min.js" defer></script>
+    <script src="addExpance.js" defer></script>
+</head>
+<header>
+    <div class="header-div">
+      <h3>Day To Day Expenses</h3>
+    </div>
+  </header>
+<body>
+    
+  <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Navbar</a> 
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <input type="button" id="premium" value="premium" class="btn btn-disable">
+        <div id="LeaderBoard-Div" class="nav-item nav-link">
+          
+        </div>
+        <div id="LeaderBoard-Div2" class="nav-item nav-link">
+          
+        </div>
+        <div id="expence-url" class="nav-item nav-link">
+          
+        </div>
+      </div>
+    </div>
+  </nav> -->
+  <div id="outer">
+    <button class="HomePageButtons" id="home-btn"><a href="./addExpance.html">Home</a></button>
+    <button class="HomePageButtons" id="premium-btn"><a>Try Premium</a></button>
+    <button class="HomePageButtons" id="view-expense-btn"><a href="/viewexpeses/view-expeses.html">View Expenses</a></button>
+  </div>
+       <div class="expense-container">
+        <div id="centered">
+          <form id="form-item">
+              <div class="form-group">
+                <label for="expence-amount">Amount:</label>
+                <input type="number" class="form-control" id="expence-amount" required>
+              </div>
+              <div class="form-group">
+                <label for="expence-desc">Description:</label>
+                <input type="text" class="form-control" id="expence-desc">
+              </div>
+              <div class="form-group">
+                <label for="expence-category">Category</label>
+                <select class="form-control" id="expence-category" required>
+                  <option selected>-select category-</option>
+                  <option value="food">Food</option>
+                  <option value="movie">Movie</option>
+                  <option value="fashion">Fashion</option>
+                  <option value="petrol">Petrol</option>
+                  <option value="bills">Bills</option>
+                </select>
+              </div>
+              <div id="centered-button">
+                  <input type="submit" value="Add Expense" id="expence-button">
+              </div>
+            </form>
+  
+         </div>
+       </div>
+
+       <!-- log out button -->
+       <div class="logout-btn-class" id="outer">
+        <button class="HomePageButtons" id="logout-btn"><a href="/sign-up/signUp.html">Logout</a></button>
+       </div>
+
+
+       <div class="topcorner">
+        <label for="raws-per-page"><span>Expenses Per Page:-</span></label>
+        <select class="" id="raws-per-page" required>
+          <option selected id="selected">-Choose Count-</option>
+          <option value="3" >3</option>
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+        </select>
+      </div>
+
+      <form action="/leaderboard-list/leaderboard.html">
+          <!-- showleader board data list -->
+    <table class="table">
+      <!-- <thead class="table-dark">
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Name</th>
+          <th scope="col">Total Expense</th>
+        </tr>
+      </thead>
+      <tbody id="total-expense-table">
+      </tbody> -->
+    </table>
+      </form>
+       <div id="centered">
+          <ul style="color: black; font-size: large; font-weight: 500;" id="ul-list"></ul>
+       </div>
+
+       <div id="centered">
+        <ul id="leaderBoardlist"></ul>
+       </div>
+       
+        
+    
+      
+       <!-- <button id="page-3" class="btn btn-secondary">3</button> -->
+</body>
+</html>

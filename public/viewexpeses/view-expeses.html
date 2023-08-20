@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Expense</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.5/axios.min.js" defer></script>
+    <script src="view-expanse.js" defer></script>
+</head>
+<body>
+    <div id="outer">
+        <button class="HomePageButtons" id="home-btn"><a href="/add-expence/addExpance.html">Go To Home</a></button>
+    </div>
+    <table class="table">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Description</th>
+            <th scope="col">Category</th>
+            <th scope="col">Delete Expense</th>
+          </tr>
+        </thead>
+        <tbody id="t-body">
+          <!-- <tr>
+            <th id="t-id" scope="row">1</th>
+            <td id="t-amount">Mark</td>
+            <td id="t-description">Otto</td>
+            <td id="t-category">@mdo</td>
+            <td id="t-deletebtn">@mdo</td>
+          </tr> -->
+        </tbody>
+      </table>
+      <div id="pagination-container"></div>
+</body>
+</html>
