@@ -39,7 +39,7 @@ async function signupData(e)
         useremail,
         userpass
     }
-    const postData=await axios.post('http://localhost:3000/user/signup',obj)
+    const postData=await axios.post('http://3.7.45.255:3000/user/signup',obj)
       if(postData.data.success===true)
       {
          alert(postData.data.responce)
@@ -84,7 +84,7 @@ async function userLogIn(event)
         password
     }
      
-    const logInData=await axios.post('http://localhost:3000/user/login',obj)
+    const logInData=await axios.post('http://3.7.45.255:3000/user/login',obj)
       alert(logInData.data.responce)
       localStorage.setItem('token',logInData.data.token)
       window.location.href='../add-expence/addExpance.html'

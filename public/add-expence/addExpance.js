@@ -71,7 +71,7 @@ async function addExpenceToList(e)
             category
         }
 
-        const postExpence=await axios.post('http://localhost:3000/expence/add-expence',obj,{headers:{'Authorization':token}})
+        const postExpence=await axios.post('http://3.7.45.255:3000/expence/add-expence',obj,{headers:{'Authorization':token}})
           
             alert('Successfully Added New Expense!');
         
@@ -96,7 +96,7 @@ const premiumButton=document.getElementById('premium-btn')
             console.log("token")
 
             //first step=1
-            const paymentData=await axios.get('http://localhost:3000/user/create-order',{headers:{'Authorization':token}})
+            const paymentData=await axios.get('http://3.7.45.255:3000/user/create-order',{headers:{'Authorization':token}})
             
             var options=
             {
@@ -105,7 +105,7 @@ const premiumButton=document.getElementById('premium-btn')
                 //This handler function handle the success payment 
                 "handler": async function(paymentData)    //third step(3) ()third party is razorpay
                 {
-                   const premuimUserData= await axios.post('http://localhost:3000/user/updated-transaction-details',
+                   const premuimUserData= await axios.post('http://3.7.45.255:3000/user/updated-transaction-details',
                     {
                         order_id:options.order_id,
                         payment_id:paymentData.razorpay_payment_id
@@ -125,7 +125,7 @@ const premiumButton=document.getElementById('premium-btn')
     
             rzp1.on('payment failed',async function(paymentData)    //callback function on payment failed
             {
-                const paymentfailed=await axios.post('http://localhost:3000/user/failed-transaction-details',
+                const paymentfailed=await axios.post('http://3.7.45.255:3000/user/failed-transaction-details',
                 {
                     order_id:paymentData.data.order.id,
                     payment_id:paymentData.razorpay_payment_id
@@ -153,7 +153,7 @@ async function showLeaderBoard()
             if (event.target.closest('.lBoard'))
             {
                 const token=localStorage.getItem('token')
-                const leaderBoardArray=await axios.get('http://localhost:3000/premium/leader-board',{headers:{'Authorization':token}})
+                const leaderBoardArray=await axios.get('http://3.7.45.255:3000/premium/leader-board',{headers:{'Authorization':token}})
          
                 const lBoardTable=document.querySelector('.table')
                 lBoardTable.innerHTML=` <thead class="table-dark">
@@ -208,7 +208,7 @@ async function downloadExpenceFunction()
    try
    {
     const token=localStorage.getItem('token')
-    const downloadUrl=await axios.get('http://localhost:3000/expence/download',{headers: {"Authorization" : token}})
+    const downloadUrl=await axios.get('http://3.7.45.255:3000/expence/download',{headers: {"Authorization" : token}})
       if(downloadUrl.status===201)
       {
         console.log("fileUrl==>>"+downloadUrl.data.url)
@@ -253,7 +253,7 @@ async function downloadExpenceListFunction()
     {
         
     const token=localStorage.getItem('token')
-          const urlList=await axios.get('http://localhost:3000/user/file-url-list',{headers: {"Authorization" : token}})
+          const urlList=await axios.get('http://3.7.45.255:3000/user/file-url-list',{headers: {"Authorization" : token}})
           if(urlList.status===201)
           {
         console.log(urlList.data.url)

@@ -8,7 +8,7 @@ async function sendMail(e)
     e.preventDefault();
     const email=document.getElementById('reset-email').value
     
-    const postData=await axios.post('http://localhost:3000/password/forgotpassword',{email})
+    const postData=await axios.post('http://3.7.45.255:3000/password/forgotpassword',{email})
       if(postData.data.success===true)
       {
          alert(postData.data.message)

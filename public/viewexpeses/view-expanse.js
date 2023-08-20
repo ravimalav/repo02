@@ -34,7 +34,7 @@ async function getExpenseFunction(page)
     {
         const token=localStorage.getItem('token')
         const raws=localStorage.getItem('rawsPerPage')
-        const getListItems=await axios.get(`http://localhost:3000/expence/get-expence?page=${page}`,{headers:{'Authorization':token,'Rawsperpage':raws}})
+        const getListItems=await axios.get(`http://3.7.45.255:3000/expence/get-expence?page=${page}`,{headers:{'Authorization':token,'Rawsperpage':raws}})
         for(let i=0;i<getListItems.data.responce.length;i++)
         {
              showExpence(getListItems.data.responce[i])
@@ -89,7 +89,7 @@ async function deleteExpence(expenceId)
     try
     {
         const token=localStorage.getItem('token')
-        const deletedExpence=await axios.delete(`http://localhost:3000/expence/delete-expence/${expenceId}`,{headers:{'Authorization':token}})
+        const deletedExpence=await axios.delete(`http://3.7.45.255:3000/expence/delete-expence/${expenceId}`,{headers:{'Authorization':token}})
         alert(deletedExpence.data.responce)
     }
     catch(err)

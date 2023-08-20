@@ -1,6 +1,6 @@
 window.addEventListener('DOMContentLoaded',async()=>
 {const token=localStorage.getItem('token')
-                const leaderBoardArray=await axios.get('http://localhost:3000/premium/leader-board',{headers:{'Authorization':token}})
+                const leaderBoardArray=await axios.get('http://3.7.45.255:3000/premium/leader-board',{headers:{'Authorization':token}})
          
                 const lBoardData=document.getElementById('total-expense-table')
                 console.log(lBoardData)
